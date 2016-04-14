@@ -35,6 +35,7 @@ function onListDocuments() {
   $.ajax('/api/documents', {
     dataType: 'json',
     type: 'GET',
+    cache: false,
     success: function(data) {
       $("#document-list").append('Got ' + data.length + ' documents');
     },
@@ -229,7 +230,7 @@ function refreshContextElements(selectedIndexIn) {
 
   // First, show our session info
   $('#session-info').empty();
-  $.ajax('/api/session'), {
+  $.ajax('/api/session', {
     dataType: 'json',
     type: 'GET',
     cache: false,
@@ -243,7 +244,7 @@ function refreshContextElements(selectedIndexIn) {
     error: function(data) {
       $('#session-info').append('Error getting session info ' + data);
     }
-  }
+  });
 
   
   
