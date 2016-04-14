@@ -7,6 +7,8 @@ var authentication = require('../authentication');
 var request = require('request-promise');
 var url = require('url');
 
+var async = require('async');
+
 var platformPath = process.env.ONSHAPE_PLATFORM;
 console.log('Platform Path :: ', platformPath);
 

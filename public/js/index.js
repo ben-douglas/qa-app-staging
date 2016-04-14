@@ -27,7 +27,7 @@ $(document).ready(function() {
   refreshContextElements(0);
 
   // Hide the UI elements we don't need right now
-  uiDisplay('off', 'on');
+  // uiDisplay('off', 'on');
 });
 
 function onListDocuments() {
@@ -226,15 +226,18 @@ var SubAsmIds = [];
 function refreshContextElements(selectedIndexIn) {
 
   // First, show our session info
+  $('#session-info').empty();
   $.ajax('/api/session'), {
     dataType: 'json',
     type: 'GET',
     success: function(data) {
-      $('#session-info').empty();
       if (typeof data.email === 'undefined') {
         $('#session-info').append('<th>Looks like no PII for you!</th><br>');
       }
       $('#session-info').append(JSON.stringify(data, null, 2));
+    },
+    error: function(data) {
+      $('#session-info').append('Error getting session ' + data);
     }
   }
 
