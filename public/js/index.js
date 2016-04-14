@@ -37,12 +37,12 @@ function onListDocuments() {
     type: 'GET',
     cache: false,
     success: function(data) {
-      $("#document-list").append('Got ' + JSON.stringify(data) + ' documents');
+      $("#document-list").append('Got ' + data.items.length + ' documents');
     },
     error: function(data) {
       $("#document-list").append('Got error <pre>' + JSON.stringify(data, null, 2) + '</pre>');
     }
-  })
+  });
 }
 
 function onCreatePS() {
@@ -59,13 +59,31 @@ function onCreatePS() {
           return;
         }
       }
-      // Create the partstudio
-      $("#create-ps").append('Not implemented Yet (Got ' + data.length + ' elements)');
     },
     error: function(data) {
-      $("#create-ps").append('Got error ' + JSON.stringify(data, null, 2));
+      $("#create-ps").append('Got error checking elements <pre>' + JSON.stringify(data, null, 2) + '</pre>');
+      return;
     }
-  })
+  });
+
+  // Create the partstudio
+  $("#create-ps").append('Not implemented Yet (Got ' + data.length + ' elements)');
+
+  $.ajax('/api/newps' +
+    "?documentId=" + theContext.documentId +
+    "&workspaceId=" + theContext.workspaceId +
+    "&name=QA+PartStudio", {
+    dataType: 'json',
+    type: 'GET',
+    success: function(data) {
+      $("#create-ps").append('QA PartStudio Created!');
+    },
+    error: function(data) {
+      $("#create-ps").append('Got error creating partstudio: <pre>' + JSON.stringify(data, null, 2) + '</pre>');
+      return;
+    }
+  });
+
 }
 
 function onDeletePS() {
