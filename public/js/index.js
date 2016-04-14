@@ -63,29 +63,24 @@ function onCreatePS() {
     },
     error: function(data) {
       $("#create-ps").append('Got error checking elements <pre>' + JSON.stringify(data, null, 2) + '</pre>');
-      return;
     }
+  }).then(function() {
+    $.ajax('/api/newps' +
+      "?documentId=" + theContext.documentId +
+      "&workspaceId=" + theContext.workspaceId +
+      "&name=QA+PartStudio",
+      {
+        dataType: 'json',
+        type: 'GET',
+        cache: false,
+        success: function(data) {
+          $("#create-ps").append('QA PartStudio Created!');
+        },
+        error: function(data) {
+          $("#create-ps").append('Got error creating partstudio: <pre>' + JSON.stringify(data, null, 2) + '</pre>');
+        }
+      });
   });
-
-  // Create the partstudio
-  $("#create-ps").append('Not implemented Yet (Got ' + data.length + ' elements)');
-
-  $.ajax('/api/newps' +
-    "?documentId=" + theContext.documentId +
-    "&workspaceId=" + theContext.workspaceId +
-    "&name=QA+PartStudio", {
-    dataType: 'json',
-    type: 'GET',
-    cache: false,
-    success: function(data) {
-      $("#create-ps").append('QA PartStudio Created!');
-    },
-    error: function(data) {
-      $("#create-ps").append('Got error creating partstudio: <pre>' + JSON.stringify(data, null, 2) + '</pre>');
-      return;
-    }
-  });
-
 }
 
 function onDeletePS() {
