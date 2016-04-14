@@ -54,7 +54,7 @@ app.use(session({
   store: new RedisStore({
     'client': client
   }),
-  secret: 'app-bom',
+  secret: 'app-qa',
   saveUninitialized: false,
   resave: false
 }));

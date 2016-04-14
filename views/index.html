@@ -2,11 +2,11 @@
 <html>
   <head>
   	<meta charset="utf-8">
-  	<title>Onshape BOM Sample Application</title>
+  	<title>Onshape QA Scope Test Application</title>
 
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/bom.css" />
+    <link rel="stylesheet" href="css/qa.css" />
 
   </head>
 
@@ -20,7 +20,24 @@
 
    <body>
     <div id="context-table">
-       <b>Bill of Materials:</b>
+       <b>Session Information:</b>
+        <div id="session-info" class="infomessage">
+            <p>Default session informaiton</p>
+        </div>
+        <button class="btn btn-primary btn-sm clearfix" id="element-list-docs">List Documents</button>
+        <div id="document-list">
+            <p>Default document list</p>
+        </div>
+        <button class="btn btn-primary btn-sm clearfix" id="element-create-ps">Create Part Studio</button>
+        <div id="create-ps">
+            <p>Create PS Result</p>
+        </div>
+        <button class="btn btn-primary btn-sm clearfix" id="element-delete-ps">Delete Part Studio</button>
+        <div id="delete-ps">
+            <p>Create PS Result</p>
+        </div>
+    </div>
+        <!--
        <select id="elt-select"></select>
        <select id="type-select">
           <option>Flattened Component List</option>
@@ -44,5 +61,6 @@
     <div class="alert alert-info" id="alert_template" style="display: none;">
         <button type="button" class="close">×</button>
     </div>
+    -->
    </body>
 </html>

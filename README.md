@@ -1,18 +1,18 @@
-#**app-bom**
-Sample app for Bill of Materials
+#**app-qa**
+Sample app for QA
 
-BOM is an node.js application demonstrating assembly navigation, metadata retrieval and shaded view generation with use of set of rich primary APIs provided by Onshape that allows Partners to interact with Onshape fully cloud based CAD system.
+App QA is an node.js application demonstrating basic integrated app permissions
 
-####**Using BOM**
+####**Using QA**
 Go to your [app preferences](https://partner.dev.onshape.com/). Click the "Create application" within Onshape document. Fill out the form like so:
 
-* **Name**: My BOM app
-* **URL**: https://onshape-app-bom.herokuapp.com/oauthSignin
+* **Name**: My QA app
+* **URL**: https://onshape-app-qa.herokuapp.com/oauthSignin
 * **Base HREF**: You can leave this blank
 
-This app requires to be run in a tab of Onshape, an iFrame. In this type of configuration, Onshape will pass documentId, workspaceId and elementId as query params to the frame. These are utilized by the BOM app to give it context of what the active document is within Onshape. 
+This app requires to be run in a tab of Onshape, an iFrame. In this type of configuration, Onshape will pass documentId, workspaceId and elementId as query params to the frame. These are utilized by the QA app to give it context of what the active document is within Onshape.
 
-BOM could also be written to run independently of the tab in Onshape. It could connect to Onshape and get a list of documents for the currently logged in user and then allow the user to select which one to work with.
+QA could also be written to run independently of the tab in Onshape. It could connect to Onshape and get a list of documents for the currently logged in user and then allow the user to select which one to work with.
   
 
 ####**Deploying to Heroku**
@@ -20,15 +20,15 @@ Make sure you have Node.js and the Heroku Toolbelt installed. You will also need
 
 Execute the following commands to create a duplicate of a repository; you need to perform both a bare-clone and a mirror-push to an newly-created bare repo (please note that you may want to use SSH instead of HTTPS, depending on your Github settings):
 
-    $ git clone --bare https://github.com/onshape/app-bom.git
+    $ git clone --bare https://github.com/onshape/app-qa.git
        # make a bare clone of the repository
     
-    $ cd app-bom.git
+    $ cd app-qa.git
     $ git push --mirror https://github.com/exampleuser/new-respository.git
        # mirror-push to new respository
        
     $ cd ..
-    $ rm -rf app-bom.git
+    $ rm -rf app-qa.git
       # remove temporary local repository
 
 ######Deploy your repo on heroku
@@ -39,11 +39,11 @@ Execute the following commands to create a duplicate of a repository; you need t
 
 To regsister the new app, go to the Dev Portal, https://dev-portal.dev.onshape.com. The output from Heroku should produce the domain name:
 
-    Application name (ex: Onshape BOM Sample)
-    Application description (one sentence; ex: "Onshape BOM Sample application — source code is available.")
-    URL for sign-in (ex: onshape-app-bom.herokuapp.com/oauthSignin)
-    URL for redirect (ex: onshape-app-bom.herokuapp.com/oauthRedirect)
-    Requested Format ID (ex: Onshape-Demo/BOM)
+    Application name (ex: Onshape QA Sample)
+    Application description (one sentence; ex: "Onshape QA Sample application — source code is available.")
+    URL for sign-in (ex: onshape-app-qa.herokuapp.com/oauthSignin)
+    URL for redirect (ex: onshape-app-qa.herokuapp.com/oauthRedirect)
+    Requested Format ID (ex: Onshape-Demo/QA)
 
 Onshape will register the app on Partner server and send back the OAUTH ID/Secret which are required for authentication.
 

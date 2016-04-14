@@ -60,10 +60,11 @@ div {
   margin-left : 30px;
 }
 
+
 .infomessage {
   margin : 10px;
   margin-left : 50px;
-  color : red;
+  color : black;
   font-family: 'Roboto';
   font-size : 12pt;
   padding  : 40px;

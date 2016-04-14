@@ -13,9 +13,9 @@ $(document).ready(function() {
   var theQuery = $.getQuery();
 
   // connect the button
-  $("#element-generate").button().click(onGenerate);
-  $("#element-save-csv").button().click(onSave);
-  $("#element-print").button().click(onPrint);
+  $("#element-list-docs").button().click(onListDocuments);
+  $("#element-create-ps").button().click(onCreatePS);
+  $("#element-delete-ps").button().click(onDeletePS);
 
   // Hold onto the current session information
   theContext.documentId = theQuery.documentId;
@@ -29,6 +29,46 @@ $(document).ready(function() {
   // Hide the UI elements we don't need right now
   uiDisplay('off', 'on');
 });
+
+function onListDocuments() {
+  $("#document-list").empty();
+  $.ajax('/api/documents', {
+    dataType: 'json',
+    type: 'GET',
+    success: function(data) {
+      $("#document-list").append('Got ' + data.length + ' documents');
+    },
+    error: function(data) {
+      $("#document-list").append('Got error ' + JSON.stringify(data, null, 2));
+    }
+  })
+}
+
+function onCreatePS() {
+  $("#create-ps").empty();
+  $.ajax('/api/elements', {
+    dataType: 'json',
+    type: 'GET',
+    success: function(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].name == 'QA PartStudio') {
+          $("#create-ps").append('Already have QA PartStudio');
+          return;
+        }
+      }
+      // Create the partstudio
+      $("#create-ps").append('Not implemented Yet');
+    },
+    error: function(data) {
+      $("#create-ps").append('Got error ' + JSON.stringify(data, null, 2));
+    }
+  })
+}
+
+function onDeletePS() {
+  $("#delete-ps").empty();
+  $("#delete-ps").append('NOT DONE YET');
+}
 
 // Send message to Onshape
 function sendMessage(msgName) {
@@ -52,7 +92,7 @@ function checkForChange(resolve, reject, elementId) {
     success: function(data) {
       var objects = data;
       if (objects.change == true && Parts.length > 0) {
-        // Show the message to say the BOM may be invalid
+        // Show the message to say the QA may be invalid
         var e = document.getElementById("element-model-change-message");
         e.style.display = "initial";
       }
@@ -184,7 +224,24 @@ var SubAsmIds = [];
 // Update the list of elements in the context object
 //
 function refreshContextElements(selectedIndexIn) {
+
+  // First, show our session info
+  $.ajax('/api/session'), {
+    dataType: 'json',
+    type: 'GET',
+    success: function(data) {
+      $('#session-info').empty();
+      if (typeof data.email === 'undefined') {
+        $('#session-info').append('<th>Looks like no PII for you!</th><br>');
+      }
+      $('#session-info').append(JSON.stringify(data, null, 2));
+    }
+  }
+
+  
+  
   // First, get all of the workspaces ...
+  /*
   var params = "?documentId=" + theContext.documentId;
   $.ajax('/api/workspace' + params, {
     dataType: 'json',
@@ -305,6 +362,7 @@ function refreshContextElements(selectedIndexIn) {
       }
     }
   });
+  */
 }
 
 //

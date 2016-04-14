@@ -76,11 +76,59 @@ var getSession = function(req, res) {
   });
 };
 
+var apiCallFail = function(error, response, message, requestBody, responseBody) {
+  var failMessage = 'API Call failed';
+  if (error) {
+    return error
+  } else if (response && response.statusCode) {
+    failMessage = message + ':\n[ ' + response.statusCode + ' ] ' +
+      response.request.method + ' ' + response.request.uri.href;
+    if (global.flags.verbose) {
+      if (requestBody) {
+        failMessage += '\n\n>>>> REQUEST:\n' + JSON.stringify(requestBody, null, 2);
+      }
+      if (responseBody) {
+        failMessage += '\n\n<<<< RESPONSE:\n' + JSON.stringify(responseBody, null, 2);
+      }
+    }
+    return { error: true, _statusCode: response.statusCode, message: failMessage };
+  }
+};
+
 var getDocuments = function(req, res) {
-  request.get({
+  var next = true;
+  var resourceList = [ ];
+  var deferred = Promise.defer();
+
+  var options = {
     uri: platformPath + '/api/documents',
     headers: {
       'Authorization': 'Bearer ' + req.user.accessToken
+    }
+  };
+
+  async.whilst(function() {
+    return next;
+  }, function(nextIteration) {
+    request.get(options, function(error, response, body) {
+      if (error || response.statusCode !== 200) {
+        next = false; // break out of the whilst loop
+        nextIteration(apiCallFail(error, response, 'Expected resource list to succeed', options.body, body));
+      } else {
+        if (body.next && body.next !== options.url) {
+          options.url = body.next;
+        } else {
+          next = false;
+        }
+        resourceList = resourceList.concat(body.items);
+        nextIteration();
+      }
+    });
+  }, function(error) {
+    if (error) {
+      deferred.reject(error);
+    } else {
+      deferred.resolve(resourceList);
     }
   }).then(function(data) {
     res.send(data);
@@ -267,10 +315,11 @@ var getMetadata = function(req, res) {
 
 var getStudioMetadata = function(req, res) {
   var url = '/api/partstudios/d/' + req.query.documentId + '/w/' + req.query.workspaceId + '/e/' + req.query.elementId + '/metadata';
-  if (req.query.microversionId > 0)
-    url = '/api/partstudios/d/' + req.query.documentId + '/m/' + req.query.microversionId + '/e/' + req.query.elementId + '/metadata'
+  if (req.query.microversionId > 0) {
+    url = '/api/partstudios/d/' + req.query.documentId + '/m/' + req.query.microversionId + '/e/' + req.query.elementId + '/metadata';
+  }
   request.get({
-    uri:platformPath + '/api/partstudios/d/' + req.query.documentId + '/w/' + req.query.workspaceId + '/e/' + req.query.elementId + '/metadata',
+    uri:platformPath + url,
     headers: {
       'Authorization': 'Bearer ' + req.user.accessToken
     }
@@ -314,7 +363,7 @@ var getExternalStudioMetadata = function(req, res) {
 var setWebhooks = function(req, res) {
   var eventList = [ "onshape.model.lifecycle.changed" ];
   var options = { collapseEvents : true };
-  var urlNotify = "https://onshape-app-bom.herokuapp.com/notify";
+  var urlNotify = "https://onshape-app-qa.herokuapp.com/notify";
   var filter = "{$DocumentId} = '" + req.query.documentId + "' && " +
                "{$WorkspaceId} = '" + req.query.workspaceId + "' && " +
                "{$ElementId} = '" + req.query.elementId + "'";
@@ -460,6 +509,52 @@ var getVersions = function(req, res) {
   });
 };
 
+var addPartStudio = function(req, res) {
+  request.post({
+    uri: process.env.ONSHAPE_PLATFORM + '/api/partstudios/d/' + req.query.documentId + '/w/' + req.query.workspaceId,
+    body: {
+      name : req.query.name
+    },
+    headers: {
+      'Authorization': 'Bearer ' + req.user.accessToken
+    },
+    json: true
+  }).then(function(data) {
+    res.send(data);
+  }).catch(function(data) {
+    if (data.statusCode === 401) {
+      authentication.refreshOAuthToken(req, res).then(function() {
+        addPartStudio(req, res);
+      }).catch(function(err) {
+        console.log('*** Error refreshing token or inserting new partstudio: ', err);
+      });
+    } else {
+      console.log('*** POST /api/partstudios error: ', data);
+    }
+  });
+};
+
+var delElement = function(req, res) {
+  request.del({
+    uri: process.env.ONSHAPE_PLATFORM + '/api/documents/d/' + req.query.documentId + '/w/' + req.query.workspaceId + '/e/' + req.query.elementId,
+    headers: {
+      'Authorization': 'Bearer ' + req.user.accessToken
+    }
+  }).then(function(data) {
+    res.send(data);
+  }).catch(function(data) {
+    if (data.statusCode === 401) {
+      authentication.refreshOAuthToken(req, res).then(function() {
+        delElement(req, res);
+      }).catch(function(err) {
+        console.log('*** Error refreshing token or deleting element: ', err);
+      });
+    } else {
+      console.log('*** DELETE /api/documents error: ', data);
+    }
+  });
+}
+
 router.get('/documents', getDocuments);
 router.get('/session', getSession);
 router.get('/elements', getElementList);
@@ -476,5 +571,7 @@ router.get('/modelchange', checkModelChange);
 router.get('/accounts', getAccounts);
 router.get('/workspace', getWorkspace);
 router.get('/versions', getVersions);
+router.get('/newps', addPartStudio);
+router.get('/delelement', delElement);
 
 module.exports = router;
