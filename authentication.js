@@ -7,7 +7,7 @@ var oauthClientSecret;
 
 var platformPath = process.env.ONSHAPE_PLATFORM;
 var hostedPath = process.env.ONSHAPE_HOST;
-var oauthPath = process.env.ONSHAPE_OAUTH_SERVICE;
+var oauthPath = process.env.ONSHAPE_OAUTH_SERVICE || platformPath;
 
 if (process.env.OAUTH_CLIENT_ID) {
   oauthClientId = process.env.OAUTH_CLIENT_ID;
