@@ -98,40 +98,12 @@ var apiCallFail = function(error, response, message, requestBody, responseBody) 
   }
 };
 
+// TODO: Pagination
 var getDocuments = function(req, res) {
-  var next = true;
-  var resourceList = [ ];
-  var deferred = Promise.defer();
-
-  var options = {
+  request.get({
     uri: platformPath + '/api/documents',
     headers: {
       'Authorization': 'Bearer ' + req.user.accessToken
-    }
-  };
-
-  async.whilst(function() {
-    return next;
-  }, function(nextIteration) {
-    request.get(options, function(error, response, body) {
-      if (error || response.statusCode !== 200) {
-        next = false; // break out of the whilst loop
-        nextIteration(apiCallFail(error, response, 'Expected resource list to succeed', options.body, body));
-      } else {
-        if (body.next && body.next !== options.url) {
-          options.url = body.next;
-        } else {
-          next = false;
-        }
-        resourceList = resourceList.concat(body.items);
-        nextIteration();
-      }
-    });
-  }, function(error) {
-    if (error) {
-      deferred.reject(error);
-    } else {
-      deferred.resolve(resourceList);
     }
   }).then(function(data) {
     res.send(data);

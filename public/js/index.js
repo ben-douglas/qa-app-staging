@@ -46,7 +46,9 @@ function onListDocuments() {
 
 function onCreatePS() {
   $("#create-ps").empty();
-  $.ajax('/api/elements', {
+  $.ajax('/api/elements'+
+    "?documentId=" + theContext.documentId +
+    "&workspaceId=" + theContext.workspaceId, {
     dataType: 'json',
     type: 'GET',
     success: function(data) {
