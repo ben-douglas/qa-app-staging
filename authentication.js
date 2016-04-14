@@ -25,8 +25,8 @@ function init() {
   });
 
   passport.use(new OnshapeStrategy({
-      clientID: oauthClientId,
-      clientSecret: oauthClientSecret,
+      clientID: XXIWU6UMJHERVNIXE2O7HGS62QEFQEH74JE22WI=,
+      clientSecret: XSB67ABX2ZJY4YIM7G2KDGCKFCMM7Y4QSXZDGL5KVSB5NY5SIJKQ====,
       callbackURL: hostedPath + "/oauthRedirect",
       authorizationURL: oauthPath + "/oauth/authorize",
       tokenURL: oauthPath + "/oauth/token",
