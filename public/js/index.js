@@ -59,7 +59,7 @@ function onCreatePS() {
         }
       }
       // Create the partstudio
-      $("#create-ps").append('Not implemented Yet');
+      $("#create-ps").append('Not implemented Yet (Got ' + data.length + ' elements)');
     },
     error: function(data) {
       $("#create-ps").append('Got error ' + JSON.stringify(data, null, 2));
@@ -239,7 +239,7 @@ function refreshContextElements(selectedIndexIn) {
       $('#session-info').append(JSON.stringify(data, null, 2));
     },
     error: function(data) {
-      $('#session-info').append('Error getting session ' + data);
+      $('#session-info').append('Error getting session info ' + data);
     }
   }
 
