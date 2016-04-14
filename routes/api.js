@@ -8,6 +8,7 @@ var request = require('request-promise');
 var url = require('url');
 
 var platformPath = process.env.ONSHAPE_PLATFORM;
+console.log('Platform Path :: ', platformPath);
 
 var client;
 if (process.env.REDISTOGO_URL) {
