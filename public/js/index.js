@@ -35,7 +35,7 @@ function onListDocuments() {
   $.ajax('/api/documents', {
     dataType: 'json',
     type: 'GET',
-    cache: false,
+    // cache: false,
     success: function(data) {
       $("#document-list").append('Got ' + data.items.length + ' documents');
     },
@@ -52,6 +52,7 @@ function onCreatePS() {
     "&workspaceId=" + theContext.workspaceId, {
     dataType: 'json',
     type: 'GET',
+    cache: false,
     success: function(data) {
       for (var i = 0; i < data.length; i++) {
         if (data[i].name == 'QA PartStudio') {
@@ -75,6 +76,7 @@ function onCreatePS() {
     "&name=QA+PartStudio", {
     dataType: 'json',
     type: 'GET',
+    cache: false,
     success: function(data) {
       $("#create-ps").append('QA PartStudio Created!');
     },
