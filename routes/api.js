@@ -64,7 +64,6 @@ var getSession = function(req, res) {
       'Authorization': 'Bearer ' + req.user.accessToken
     }
   }).then(function(data) {
-    console.log('****** getSession - got data' + JSON.stringify(data));
     res.send(data);
   }).catch(function(data) {
     console.log('****** getSession - CATCH ' + data.statusCode);
@@ -88,7 +87,7 @@ var getDocuments = function(req, res) {
       'Authorization': 'Bearer ' + req.user.accessToken
     }
   }).then(function(data) {
-    console.log('getDocuments got data : ' + JSON.stringify(data));
+    console.log('getDocuments got data : ' + data.length);
     res.send(data);
   }).catch(function(data) {
     if (data.statusCode === 401) {
