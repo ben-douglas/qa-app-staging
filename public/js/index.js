@@ -232,7 +232,9 @@ function refreshContextElements(selectedIndexIn) {
   $.ajax('/api/session'), {
     dataType: 'json',
     type: 'GET',
+    cache: false,
     success: function(data) {
+      $('#session-info').append('<h3>Session info:</h3><br>');
       if (typeof data.email === 'undefined') {
         $('#session-info').append('<th>Looks like no PII for you!</th><br>');
       }

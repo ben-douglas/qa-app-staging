@@ -80,25 +80,6 @@ var getSession = function(req, res) {
   });
 };
 
-var apiCallFail = function(error, response, message, requestBody, responseBody) {
-  var failMessage = 'API Call failed';
-  if (error) {
-    return error
-  } else if (response && response.statusCode) {
-    failMessage = message + ':\n[ ' + response.statusCode + ' ] ' +
-      response.request.method + ' ' + response.request.uri.href;
-    if (global.flags.verbose) {
-      if (requestBody) {
-        failMessage += '\n\n>>>> REQUEST:\n' + JSON.stringify(requestBody, null, 2);
-      }
-      if (responseBody) {
-        failMessage += '\n\n<<<< RESPONSE:\n' + JSON.stringify(responseBody, null, 2);
-      }
-    }
-    return { error: true, _statusCode: response.statusCode, message: failMessage };
-  }
-};
-
 // TODO: Pagination
 var getDocuments = function(req, res) {
   request.get({
